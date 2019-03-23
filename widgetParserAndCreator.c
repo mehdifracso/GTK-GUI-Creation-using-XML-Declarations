@@ -37,7 +37,7 @@ GtkWidget *createWidget(xmlNode *node)
     {
         widget = creerBouton(node);
     }
-    else if(xmlStrcmp(node->name, "grid"))
+    else if(xmlStrcmp(node->name, "scale"))
     {
         widget = creerEchelle(node);
     }
@@ -75,7 +75,7 @@ GtkWidget *parseStructureAndCreateGUI(char cheminFichier[200])
     //  Creer le widget fenetre
     GtkWidget* mainWindow = creerFenetre(mainWindowNode);
 
-    //  Trouver le noeud fils de la fenetre, le creer et le lier à son parent
+    //  Trouver le noeud fils de la fenetre, le creer et le lier Ã  son parent
     if(mainWindowNode->children)
         createAndLinkChild(mainWindow,1,mainWindowNode->children);
 }
@@ -83,14 +83,14 @@ GtkWidget *parseStructureAndCreateGUI(char cheminFichier[200])
 //  Child node is the current node
 void createAndLinkChild(GtkWidget *parentWidget, int parentNature, xmlNode *childNode)
 {
-    //  Verifier si on est arrivé à un noeud feuille (pas de noeud(s) enfant(s))
+    //  Verifier si on est arrivÃ© Ã  un noeud feuille (pas de noeud(s) enfant(s))
     if(!childNode)
     {
         int top, left, height, width;
         //  Creer le widget et le retourner
         GtkWidget *childWidget = createWidget(childNode);
 
-        //  Le lier à son widget pere
+        //  Le lier Ã  son widget pere
         switch(parentNature)
         {
         case 1:
@@ -103,10 +103,10 @@ void createAndLinkChild(GtkWidget *parentWidget, int parentNature, xmlNode *chil
             gtk_toolbar_insert(GTK_TOOLBAR(parentWidget),GTK_TOOL_ITEM(childWidget),0);
             break;
         case 4:
-            top = atoi(xmlGetProp(childNode,"startCol"));      //  La colonne d'où la cellule va débuter
-            left = atoi(xmlGetProp(childNode,"startRow"));     //  La ligne d'où la cellule va débuter
-            height = atoi(xmlGetProp(childNode,"finishRow"));  //  La ligne où la cellule va se terminer
-            width = atoi(xmlGetProp(childNode,"finishCol"));   //  La colonne où la cellule va se terminer
+            top = atoi(xmlGetProp(childNode,"startCol"));      //  La colonne d'oÃ¹ la cellule va dÃ©buter
+            left = atoi(xmlGetProp(childNode,"startRow"));     //  La ligne d'oÃ¹ la cellule va dÃ©buter
+            height = atoi(xmlGetProp(childNode,"finishRow"));  //  La ligne oÃ¹ la cellule va se terminer
+            width = atoi(xmlGetProp(childNode,"finishCol"));   //  La colonne oÃ¹ la cellule va se terminer
             gtk_grid_attach(GTK_GRID(parentWidget),childWidget,left,top,width,height);
             break;
         case 5:
