@@ -13,6 +13,40 @@ GtkWidget *createWidget(xmlNode *node)
     {
         widget = creerBox(node);
     }
+    else if(xmlStrcmp(node->name, "menubar"))
+    {
+        widget = creerBarreMenu(node);
+    }
+    else if(xmlStrcmp(node->name, "menu"))
+    {
+        widget = creerMenu(node);
+    }
+    else if(xmlStrcmp(node->name, "menuItem"))
+    {
+        widget = creerElementMenu(node);
+    }
+    else if(xmlStrcmp(node->name, "toolbar"))
+    {
+        widget = creerBarreOutils(node);
+    }
+    else if(xmlStrcmp(node->name, "toolItem"))
+    {
+        widget = creerOutil(node);
+    }
+    else if(xmlStrcmp(node->name, "button"))
+    {
+        widget = creerBouton(node);
+    }
+    else if(xmlStrcmp(node->name, "grid"))
+    {
+        widget = creerEchelle(node);
+    }
+    else if(xmlStrcmp(node->name, "grid"))
+    {
+        widget = creerTableau(node);
+    }
+
+
     //  Une petite verification avant de retourner le widget
     if(widget)
         return widget;
