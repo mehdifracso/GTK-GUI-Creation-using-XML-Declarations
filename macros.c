@@ -4,11 +4,11 @@
 //  Creer une fenetre
 GtkWidget* creerFenetre(xmlNode* windowNode)
 {
-    //  Variable pour stocker les valeurs de chaque propriété
+    //  Variable pour stocker les valeurs de chaque propriÃ©tÃ©
     int type, width, height, position, resizable;
     const xmlChar *title;
 
-    //  Créer le pointeur sur fenêtre
+    //  CrÃ©er le pointeur sur fenÃªtre
     GtkWidget *window;
 
     //  Recuperer la valeur de chaque propriete
@@ -22,7 +22,7 @@ GtkWidget* creerFenetre(xmlNode* windowNode)
     /*
     *   Verification si les valeurs sont correctes ou bien saisies,
     *   si elles sont correctes ne rien faire
-    *   sinon affecter des valeurs par défaut
+    *   sinon affecter des valeurs par dÃ©faut
     */
 
     if((type < 0) || (type > 1))
@@ -55,10 +55,10 @@ GtkWidget* creerFenetre(xmlNode* windowNode)
 //  Creation d'un box
 GtkWidget* creerBox(xmlNode* boxNode)
 {
-    //  Variable pour stocker les valeurs de chaque propriété
+    //  Variable pour stocker les valeurs de chaque propriÃ©tÃ©
     int orientation, spacing, homogeneous;
 
-    //  Créer le pointeur sur le box
+    //  CrÃ©er le pointeur sur le box
     GtkWidget *box;
 
     //  Recuperer la valeur de chaque propriete
@@ -70,7 +70,7 @@ GtkWidget* creerBox(xmlNode* boxNode)
     /*
     *   Verification si les valeurs sont correctes ou bien saisies,
     *   si elles sont correctes ne rien faire
-    *   sinon affecter des valeurs par défaut
+    *   sinon affecter des valeurs par dÃ©faut
     */
 
     if((orientation < 0) || (orientation > 1))
@@ -95,7 +95,7 @@ GtkWidget* creerBox(xmlNode* boxNode)
 //  Creation d'une barre de menus
 GtkWidget* creerBarreMenu()
 {
-    //  Créer le pointeur sur la barre de menus
+    //  CrÃ©er le pointeur sur la barre de menus
     GtkWidget *menuBar;
     menuBar = gtk_menu_bar_new();
 
@@ -148,7 +148,7 @@ GtkWidget* creerElementMenu(xmlNode* menuItemNode)
 GtkWidget* creerBarreOutils(xmlNode* toolbarNode)
 {
     //  Variable d'affichage d'une fleche d'extension d'outils
-    //  au cas où il n'y a pas d'espace pour afficher le tout
+    //  au cas oÃ¹ il n'y a pas d'espace pour afficher le tout
     int showArrow;
 
     //  Recuperer la valeur d'affichage d'extension
@@ -232,7 +232,7 @@ GtkWidget* creerBouton(xmlNode* buttonNode)
 
     //  Recuperer les valeurs des proprietes
     relief = atoi(xmlGetProp(buttonNode,"relief"));
-    label = xmlGetProp(buttonNode,"label");
+    label = xmlGetProp(buttonNode,"name");
 
     //  Une petite verification
     if((relief < 0) || (relief > 2))
