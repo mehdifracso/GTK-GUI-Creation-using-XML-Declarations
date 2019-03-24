@@ -84,7 +84,7 @@ GtkWidget *parseStructureAndCreateGUI(char cheminFichier[200])
 void createAndLinkChild(GtkWidget *parentWidget, int parentNature, xmlNode *childNode)
 {
     //  Verifier si on est arrivé à un noeud feuille (pas de noeud(s) enfant(s))
-    if(!childNode)
+    if(childNode)
     {
         int top, left, height, width;
         //  Creer le widget et le retourner
