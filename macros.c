@@ -133,9 +133,6 @@ GtkWidget* creerElementMenu(xmlNode* menuItemNode)
     //  Recuperer le titre de l'element de menu
     label = xmlGetProp(menuItemNode,"name");
 
-    //  Donner un titre par defaut si on ne l'a pas saisi dans le fichier XML
-    strcpy((char *)label,"menu sans nom");
-
     GtkWidget *menuItem;
 
     menuItem = gtk_menu_item_new_with_label((const gchar*)label);
@@ -174,8 +171,6 @@ GtkWidget* creerOutil(xmlNode* toolItemNode)
     int homogeneous, expandable, dragWindow, important,
     visibleVertical, visibleHorizontal;
 
-    const xmlChar *tooltipText = NULL, *markupText = NULL;
-
 
     //  Recuperer les valeurs des proprietes
     homogeneous = atoi(xmlGetProp(toolItemNode,"homogeneous"));
@@ -184,8 +179,8 @@ GtkWidget* creerOutil(xmlNode* toolItemNode)
     important = atoi(xmlGetProp(toolItemNode,"important"));
     visibleVertical = atoi(xmlGetProp(toolItemNode,"visibleVertical"));
     visibleHorizontal = atoi(xmlGetProp(toolItemNode,"visibleHorizontal"));
-    tooltipText = xmlGetProp(toolItemNode,"tooltipText");
-    markupText = xmlGetProp(toolItemNode,"markupText");
+
+
 
     //  Une petite verification
     if(homogeneous)
@@ -200,23 +195,19 @@ GtkWidget* creerOutil(xmlNode* toolItemNode)
         visibleVertical = 1;
     if(visibleHorizontal)
         visibleHorizontal = 1;
-    if(!tooltipText)
-        strcpy((char *)tooltipText,"Pas de texte saisi");
-    if(!markupText)
-        strcpy((char *)markupText,"Pas de texte saisi");
+
+
 
     //  Creation du widget et affectation des valeurs recuperees
     GtkWidget *toolitem;
     toolitem = gtk_tool_item_new();
-
     gtk_tool_item_set_homogeneous(toolitem,homogeneous);
     gtk_tool_item_set_expand(toolitem,expandable);
     gtk_tool_item_set_use_drag_window(toolitem,dragWindow);
     gtk_tool_item_set_is_important(toolitem,important);
     gtk_tool_item_set_visible_vertical(toolitem,visibleVertical);
     gtk_tool_item_set_visible_horizontal(toolitem,visibleHorizontal);
-    gtk_tool_item_set_tooltip_markup(toolitem,markupText);
-    gtk_tool_item_set_tooltip_text(toolitem,tooltipText);
+
 
     return toolitem;
 }
@@ -257,7 +248,6 @@ GtkWidget* creerEchelle(xmlNode* scaleNode)
 {
     //  Variables pour stocker les proprietes du bouton
     int orientation, min, max, step, digits, draw, origin, valuePosition;
-
 
     //  Recuperer les valeurs des proprietes
     orientation = atoi(xmlGetProp(scaleNode,"orientation"));
@@ -344,3 +334,54 @@ GtkWidget* creerTableau(xmlNode* gridNode)
 
     return grid;
 }
+
+//// Creation d'une zone d'entrée de texte
+//GtkWidget *creerEntreeTexte(xmlNode* textEntryNode)
+//{
+//    GtkWidget *textEntry;
+//    int maxLength,getOrNot,visibOrNot, hasFrame, maxWidth;
+//    float alignement;
+//    xmlChar *contentValue = NULL, *placeholder = NULL;
+//
+//    maxLength = atoi(xmlGetProp(textEntryNode,"maxLength"));
+//    getOrNot = atoi(xmlGetProp(textEntryNode,"method"));
+//    visible = atoi(xmlGetProp(textEntryNode,"visible"));
+//    hasFrame = atoi(xmlGetProp(textEntryNode,"hasFrame"));
+//    hasFrame = atoi(xmlGetProp(textEntryNode,"hasFrame"));
+//    alignement = atof(xmlGetProp(textEntryNode,"alignement"));
+//    contentValue = xmlGetProp(textEntryNode, "contentValue");
+//    placeholder = xmlGetProp(textEntryNode, "placeholder");
+//
+//
+//    if((maxLength < 0) || (maxLength > 50))
+//        maxLength = 50;
+//
+//    if(visible != 0)
+//        visible = 1;
+//
+//    if(hasFrame)
+//        hasFrame = 1;
+//
+//    if(maxWidth < 1)
+//        maxWidth = 1;
+//
+//    if((alignement < 0) || (alignement > 1))
+//        alignement = 0;
+//
+//    if(!contentValue)
+//        strcpy((char *)contentValue, "Pas de texte prédifini");
+//
+//    if(!placeholder)
+//        strcpy((char *)placeholder, "Pas d'indication");
+//
+//    textEntry = gtk_entry_new_with_max_length(length);
+//    gtk_entry_set_visibility(textEntry,visible);
+//    gtk_entry_set_text(textEntry, (const gchar *)contentValue);
+//    gtk_entry_set_max_length(textEntry,maxLength);
+//    gtk_entry_set_has_frame(textEntry,hasFrame);
+//    gtk_entry_set_max_width_char(textEntry,maxWidth);
+//    gtk_entry_set_placeholder_text(textEntry,placeholder);
+//
+//
+//    return textentry;
+//}
