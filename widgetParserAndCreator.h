@@ -3,9 +3,9 @@
 #include "macros.h"
 
 
-void createAndLinkChild(GtkWidget *parentWidget, int parentNature, xmlNode *childNode);
+void createAndLinkChild(GtkWidget *parentWidget, int parentNature, xmlNode *childNode, char *parentName);
 GtkWidget *parseStructureAndCreateGUI(char cheminFichier[200]);
-GtkWidget *createWidget(xmlNode *node);
+GtkWidget *createWidget(GtkWidget* parentWidget,xmlNode *node);
 
 
 #endif // WIDGETPARSERANDCREATOR_H_INCLUDED

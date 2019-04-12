@@ -1,44 +1,58 @@
-<window nature="1" type="0" width="400" height="150" position="2" resizable="1" title="Banc de poisson">
-	<box nature="5" orientation="1" spacing="2">
-		<menubar nature="2">
-			<menu title="Fichier">
-				<menuItem name="Ouvrir" event="1"></menuItem>
-				<menuItem name="Sauvegarder" event="2"></menuItem>
-				<menuItem name="Quitter" event="3"></menuItem>
-			</menu>
-			<menu title="Fonctionnalités">
-				<menuItem name="Ajouter poisson" event="4"></menuItem>
-				<menuItem name="Ajouter predateur" event="5"></menuItem>
-				<menuItem name="Supprimer poisson" event="6"></menuItem>
-				<menuItem name="Supprimer predateur" event="7"></menuItem>
-			</menu>
-			<menu title="?">
-				<menuItem name="A propos" event="8"></menuItem>
-				<menuItem name="Version" event="9"></menuItem>
-			</menu>
-		</menubar>
-		
-		<toolbar nature="3" showArrow="1">
-			<toolItem nature="1">
-				<button nature="1" name="Ajouter poisson" event="4"></button>
-			</toolItem>
-			<toolItem nature="1">
-				<button nature="1" name="Supprimer poisson" event="6"></button>
-			</toolItem>
-			<toolItem nature="1">
-				<button nature="1" name="Ajouter predateur" event="5"></button>
-			</toolItem>
-			<toolItem nature="1">
-				<button nature="1" name="Supprimer predateur" event="7"></button>
-			</toolItem>
-			<toolItem nature="1">
-				<scale nature="1" name="Changer vitesse" event="10"></scale>
-			</toolItem>
-		</toolbar>
-		
-		<grid nature="4" columns="30" rows="90">
-			
-		</grid>
-	</box>
+<window nature="1" type="0" width="400" height="400" position="2" resizable="1" title="Banc de poisson">
+	<scrollBar nature="6" hscroll_policy="1" vscroll_policy="1">
+		<box nature="5" orientation="1" spacing="2">
+			<menubar nature="6">
+				<menu nature="2" title="Fichier">
+					<menuItem name="Ouvrir" nature="0" event="1"></menuItem>
+					<menuItem name="Sauvegarder" nature="0" event="2"></menuItem>
+					<menuItem name="Quitter" nature="0" event="3"></menuItem>
+				</menu>
+				<menu nature="2" title="Fonctionnalités">
+					<menuItem name="Ajouter poisson" nature="0" event="4"></menuItem>
+					<menuItem name="Ajouter predateur" nature="0" event="5"></menuItem>
+					<menuItem name="Supprimer poisson" nature="0" event="6"></menuItem>
+					<menuItem name="Supprimer predateur" nature="0" event="7"></menuItem>
+				</menu>
+				<menu nature="2" title="?">
+					<menuItem name="A propos" nature="0" event="8"></menuItem>
+					<menuItem name="Version" nature="0" event="9"></menuItem>
+				</menu>
+			</menubar>
+
+			<toolbar nature="3" showArrow="1">
+				<toolItem nature="1">
+					<button nature="0" name="Ajouter poisson" event="4"></button>
+				</toolItem>
+				<toolItem nature="1">
+					<button nature="0" name="Supprimer poisson" event="6"></button>
+				</toolItem>
+				<toolItem nature="1">
+					<button nature="0" name="Ajouter predateur" event="5"></button>
+				</toolItem>
+				<toolItem nature="1">
+					<button nature="0" name="Supprimer predateur" event="7"></button>
+				</toolItem>
+				<toolItem nature="1">
+					<spinButton nature="0" min="0" max="100" step="5"></spinButton>
+				</toolItem>
+				<toolItem nature="1">
+					<checkButton ></checkButton>
+				</toolItem>
+				<toolItem nature="1">
+					<label contenu="La création de l'etiquette est reussie"></label>
+				</toolItem>
+			</toolbar>
+			<image path="google.png" width="1000" height="1000"></image>
+			<searchEntry height="50" width="20"/>
+			<separateur height="30" width="20" type="0"/>
+			<combobox>
+				<comboboxItem label="C"/>
+				<comboboxItem label="C++"/>
+				<comboboxItem label="JAVA"/>
+				<comboboxItem label="PYTHON"/>
+			</combobox>
+			<frame label="cadre"/>
+		</box>
+	</scrollBar>
 </window>
 

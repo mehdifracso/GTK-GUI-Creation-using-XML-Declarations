@@ -4,11 +4,11 @@
 //  Creer une fenetre
 GtkWidget* creerFenetre(xmlNode* windowNode)
 {
-    //  Variable pour stocker les valeurs de chaque propriÃ©tÃ©
+    //  Variable pour stocker les valeurs de chaque propriété
     int type, width, height, position, resizable;
     const xmlChar *title;
 
-    //  CrÃ©er le pointeur sur fenÃªtre
+    //  Créer le pointeur sur fenêtre
     GtkWidget *window;
 
     //  Recuperer la valeur de chaque propriete
@@ -22,7 +22,7 @@ GtkWidget* creerFenetre(xmlNode* windowNode)
     /*
     *   Verification si les valeurs sont correctes ou bien saisies,
     *   si elles sont correctes ne rien faire
-    *   sinon affecter des valeurs par dÃ©faut
+    *   sinon affecter des valeurs par défaut
     */
 
     if((type < 0) || (type > 1))
@@ -55,10 +55,10 @@ GtkWidget* creerFenetre(xmlNode* windowNode)
 //  Creation d'un box
 GtkWidget* creerBox(xmlNode* boxNode)
 {
-    //  Variable pour stocker les valeurs de chaque propriÃ©tÃ©
+    //  Variable pour stocker les valeurs de chaque propriété
     int orientation, spacing, homogeneous;
 
-    //  CrÃ©er le pointeur sur le box
+    //  Créer le pointeur sur le box
     GtkWidget *box;
 
     //  Recuperer la valeur de chaque propriete
@@ -70,7 +70,7 @@ GtkWidget* creerBox(xmlNode* boxNode)
     /*
     *   Verification si les valeurs sont correctes ou bien saisies,
     *   si elles sont correctes ne rien faire
-    *   sinon affecter des valeurs par dÃ©faut
+    *   sinon affecter des valeurs par défaut
     */
 
     if((orientation < 0) || (orientation > 1))
@@ -95,7 +95,7 @@ GtkWidget* creerBox(xmlNode* boxNode)
 //  Creation d'une barre de menus
 GtkWidget* creerBarreMenu()
 {
-    //  CrÃ©er le pointeur sur la barre de menus
+    //  Créer le pointeur sur la barre de menus
     GtkWidget *menuBar;
     menuBar = gtk_menu_bar_new();
 
@@ -104,7 +104,7 @@ GtkWidget* creerBarreMenu()
 
 
 //  Creation d'un menu
-GtkWidget* creerMenu(xmlNode* menuNode)
+GtkWidget* creerMenu(GtkWidget* menuBar, xmlNode* menuNode)
 {
     //  Variable pour stocker le titre
     const xmlChar *label;
@@ -113,13 +113,14 @@ GtkWidget* creerMenu(xmlNode* menuNode)
     label = xmlGetProp(menuNode,"title");
 
     //  Donner un titre par defaut si on ne l'a pas saisi dans le fichier XML
-    strcpy((char *)label,"menu sans nom");
+    //  strcpy((char *)label,"menu sans nom");
 
     GtkWidget *menu, *labeledMenuItem;
 
     menu = gtk_menu_new();
     labeledMenuItem = gtk_menu_item_new_with_label(label);
     gtk_menu_item_set_submenu(GTK_MENU_ITEM(labeledMenuItem),menu);
+    gtk_menu_shell_append(GTK_MENU_SHELL(menuBar),labeledMenuItem);
 
     return menu;
 }
@@ -145,14 +146,14 @@ GtkWidget* creerElementMenu(xmlNode* menuItemNode)
 GtkWidget* creerBarreOutils(xmlNode* toolbarNode)
 {
     //  Variable d'affichage d'une fleche d'extension d'outils
-    //  au cas oÃ¹ il n'y a pas d'espace pour afficher le tout
+    //  au cas où il n'y a pas d'espace pour afficher le tout
     int showArrow;
 
     //  Recuperer la valeur d'affichage d'extension
     showArrow = atoi(xmlGetProp(toolbarNode,"showArrow"));
 
     //  Une petite verification
-    if(showArrow)
+      if(showArrow)
         showArrow = 1;
 
     //  Creation du widget
@@ -193,9 +194,6 @@ GtkWidget* creerOutil(xmlNode* toolItemNode)
         important = 1;
     if(visibleVertical)
         visibleVertical = 1;
-    if(visibleHorizontal)
-        visibleHorizontal = 1;
-
 
 
     //  Creation du widget et affectation des valeurs recuperees
@@ -206,7 +204,7 @@ GtkWidget* creerOutil(xmlNode* toolItemNode)
     gtk_tool_item_set_use_drag_window(toolitem,dragWindow);
     gtk_tool_item_set_is_important(toolitem,important);
     gtk_tool_item_set_visible_vertical(toolitem,visibleVertical);
-    gtk_tool_item_set_visible_horizontal(toolitem,visibleHorizontal);
+
 
 
     return toolitem;
@@ -303,8 +301,8 @@ GtkWidget* creerEchelle(xmlNode* scaleNode)
     return scale;
 }
 
-//  Creation d'un tableau
-GtkWidget* creerTableau(xmlNode* gridNode)
+//  Creation d'une grille
+GtkWidget* creerGrille(xmlNode* gridNode)
 {
     //  Variables pour stocker les proprietes du tableau
     int columns, rows;
@@ -335,7 +333,236 @@ GtkWidget* creerTableau(xmlNode* gridNode)
     return grid;
 }
 
-//// Creation d'une zone d'entrÃ©e de texte
+//  creation d'un tableau
+GtkWidget* creerTableau(xmlNode* tableNode)
+{
+    GtkWidget *table;
+    //  Variables pour stocker les proprietes du tableau
+    int columns, rows;
+
+
+    //  Recuperer les valeurs des proprietes
+    columns = atoi(xmlGetProp(tableNode,"columns"));
+    rows = atoi(xmlGetProp(tableNode,"rows"));
+
+    //  Une petite verification
+    if((columns < 0) || (columns > 50))
+        columns = 25;
+
+    if((rows < 0) || (rows > 50))
+        rows = 25;
+
+    //  Creation du widget et affectation des valeurs recuperees
+
+    table = gtk_table_new(rows,columns,TRUE);
+
+    return table;
+}
+
+
+GtkWidget *creerBarreDefilement(xmlNode* scrollNode)
+{
+    GtkWidget *scrollbar;
+
+    int horizontalScrolling, verticalScrolling;
+    horizontalScrolling = atoi(xmlGetProp(scrollNode,"hscroll_policy"));
+    verticalScrolling = atoi(xmlGetProp(scrollNode,"vscroll_policy"));
+
+    if(horizontalScrolling)
+        horizontalScrolling = 1;
+
+    if(verticalScrolling)
+        verticalScrolling = 1;
+
+    if(horizontalScrolling && verticalScrolling)
+        horizontalScrolling = 0;
+
+    /* paramètres concernant l'affichage des barres de défilement.*/
+    scrollbar = gtk_scrolled_window_new(NULL, NULL);
+    gtk_scrolled_window_set_policy(scrollbar,verticalScrolling,horizontalScrolling);
+
+   return scrollbar;
+}
+
+
+GtkWidget* creerBoutonDeRotation(xmlNode *spinNode)
+{
+    GtkWidget* spin;
+
+    int min, max, step;
+
+    min = atoi(xmlGetProp(spinNode,"min"));
+    max = atoi(xmlGetProp(spinNode,"max"));
+    step = atoi(xmlGetProp(spinNode,"step"));
+
+    spin = gtk_spin_button_new_with_range(min,max,step);
+
+    return spin;
+
+}
+
+GtkWidget* creerCaseACocher(const xmlNode* checkbuttonNode)
+{
+    GtkWidget *checkbutton;
+    const xmlChar *contenucb;
+    int choice;
+
+    choice = atoi(xmlGetProp(checkbuttonNode,"type"));
+    contenucb = xmlGetProp(checkbuttonNode,"contenucb");
+
+    if(!choice)
+        checkbutton = gtk_check_button_new_with_mnemonic(contenucb);
+    else
+        checkbutton = gtk_check_button_new_with_label(contenucb);
+
+    return checkbutton;
+}
+
+
+GtkWidget* creerEtiquette(xmlNode* labelNode)
+{
+    GtkWidget *label;
+    const xmlChar *contenu;
+
+    contenu = xmlGetProp(labelNode,"contenu");
+
+    label=gtk_label_new(contenu);
+
+    return label;
+}
+
+
+GtkWidget* creerImage(xmlNode* imageNode)
+{
+    GtkWidget *image;//widget image
+    const xmlChar *path;//chemin de l'image
+    int  width, height;//position de l'image
+   // int image_type; // CH_IMG ou Q_IMG
+
+
+    path = xmlGetProp(imageNode,"path");
+    width= atoi(xmlGetProp(imageNode,"width"));
+    height = atoi(xmlGetProp(imageNode,"height"));
+
+    if((width <= 0) || (width > 5000))
+        width = 100;
+
+    if((height< 0) || (height > 5000))
+        height = 100;
+
+    image = gtk_image_new_from_file(path);
+    gtk_widget_set_size_request(GTK_WIDGET(image),width,height);
+
+    return image;
+}
+
+//creer searchEntry
+GtkWidget *creerSearchEntry(xmlNode* SearchEntryNode)
+{
+    //  Variables pour stocker les proprietes du bouton
+
+    GtkWidget  *search;
+    int width, height;
+
+    //  Recuperer les valeurs des proprietes
+
+    width = atoi(xmlGetProp(SearchEntryNode,"width"));
+    height = atoi(xmlGetProp(SearchEntryNode,"height"));
+
+    // Affectation des  valeurs
+
+    search = gtk_search_entry_new ();
+    gtk_widget_set_size_request(GTK_WIDGET(search),width,height);
+
+    return search;
+}
+
+//  Creation du ComboBox
+GtkWidget* creerComboBox(xmlNode* ComboBoxNode)
+{
+    // Declaration du widget
+    GtkWidget *ComboBox;
+    // Creation de la liste deroulante
+   ComboBox=gtk_combo_box_text_new();
+    // retourner le widget
+   return ComboBox;
+}
+
+
+//  Ajout d'element au combo box
+GtkWidget* creerComboBoxElement(GtkWidget *ComboBox,xmlNode* ComboBoxNode)
+{
+    //  Variables pour stocker les proprietes
+
+   const xmlChar *label;
+
+   //  Recuperer les valeurs des proprietes
+
+   label = (xmlGetProp(ComboBoxNode,"label"));
+
+   // Affectation des  valeurs et l'ajout de l'element a la liste deroulante
+
+   gtk_combo_box_text_append_text(GTK_COMBO_BOX(ComboBox),label);
+
+   return ComboBox;
+}
+
+
+//  Creation separateur
+GtkWidget *creerSeparateur(xmlNode* separateurNode)
+{
+    //  Variables pour stocker les proprietes du separateur
+
+    GtkWidget *separateur;
+    const xmlChar *type;
+    int width, height;
+
+    //  Recuperer les valeurs des proprietes
+
+    width = atoi(xmlGetProp(separateurNode,"width"));
+    height = atoi(xmlGetProp(separateurNode,"height"));
+    type = atoi(xmlGetProp(separateurNode,"type"));
+
+
+    // Affectation des  valeurs
+    /// si type != 0 alors on va creer un separateur horizontal sinon le separateur creer va etre vertical
+    if(type)
+    	separateur = gtk_hseparator_new();
+    else
+    	separateur = gtk_vseparator_new();
+
+    gtk_widget_set_size_request(GTK_WIDGET(separateur),width,height);
+
+    return separateur;
+}
+
+//  Creation cadre
+GtkWidget *creerFrame(xmlNode* frameNode)
+{
+    //  Variables pour stocker les proprietes du bouton
+
+    GtkWidget *frame;
+    const xmlChar *label;
+    ///int x, y;
+
+    //  Recuperer les valeurs des proprietes
+
+    ///x = atoi(xmlGetProp(frameNode,"x"));
+    ///y = atoi(xmlGetProp(frameNode,"y"));
+    label = (xmlGetProp(frameNode,"label"));
+
+
+    // Affectation des  valeurs
+    frame = gtk_frame_new (label);
+    //gtk_frame_set_label(frame,label);
+    //gtk_frame_set_label_align(frame,x,y);
+    //gtk_frame_set_shadow_type(GTK_FRAME(frame),C_SHADOW_ETCHED_IN_OUT);
+
+    return frame;
+}
+
+
+//// Creation d'une zone d'entrée de texte
 //GtkWidget *creerEntreeTexte(xmlNode* textEntryNode)
 //{
 //    GtkWidget *textEntry;
@@ -369,7 +596,7 @@ GtkWidget* creerTableau(xmlNode* gridNode)
 //        alignement = 0;
 //
 //    if(!contentValue)
-//        strcpy((char *)contentValue, "Pas de texte prÃ©difini");
+//        strcpy((char *)contentValue, "Pas de texte prédifini");
 //
 //    if(!placeholder)
 //        strcpy((char *)placeholder, "Pas d'indication");

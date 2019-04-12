@@ -1,7 +1,7 @@
 #include "widgetParserAndCreator.h"
 
 
-GtkWidget *createWidget(xmlNode *node)
+GtkWidget *createWidget(GtkWidget* parentWidget,xmlNode *node)
 {
     GtkWidget *widget = NULL;
 
@@ -19,7 +19,7 @@ GtkWidget *createWidget(xmlNode *node)
     }
     else if(xmlStrcmp(node->name, "menu") == 0)
     {
-        widget = creerMenu(node);
+        widget = creerMenu(parentWidget,node);
     }
     else if(xmlStrcmp(node->name, "menuItem") == 0)
     {
@@ -43,11 +43,59 @@ GtkWidget *createWidget(xmlNode *node)
     }
     else if(xmlStrcmp(node->name, "grid") == 0 )
     {
+        widget = creerGrille(node);
+    }
+    else if(xmlStrcmp(node->name, "table") == 0 )
+    {
         widget = creerTableau(node);
     }
     else if(xmlStrcmp(node->name, "textEntry") == 0)
     {
 //        widget = creerEntreeTexte(node);
+    }
+    else if(xmlStrcmp(node->name, "scrollBar") == 0)
+    {
+        widget = creerBarreDefilement(node);
+    }
+    else if(xmlStrcmp(node->name, "spinButton") == 0)
+    {
+        widget = creerBoutonDeRotation(node);
+    }
+    else if(xmlStrcmp(node->name, "checkButton") == 0)
+    {
+        widget = creerCaseACocher(node);
+    }
+    else if(xmlStrcmp(node->name, "label") == 0)
+    {
+        widget = creerEtiquette(node);
+    }
+    else if(xmlStrcmp(node->name, "image") == 0)
+    {
+        widget = creerImage(node);
+    }
+    else if(xmlStrcmp(node->name, "searchEntry") == 0 )
+    {
+        widget = creerSearchEntry(node);
+    }
+    else if(xmlStrcmp(node->name, "textEntry") == 0)
+    {
+        //  widget = creerEntreeTexte(node);
+    }
+     else if(xmlStrcmp(node->name, "combobox") == 0 )
+    {
+        widget = creerComboBox(node);
+    }
+     else if(xmlStrcmp(node->name, "comboboxItem") == 0 )
+    {
+        widget = creerComboBoxElement(parentWidget,node);
+    }
+     else if(xmlStrcmp(node->name, "separateur") == 0 )
+    {
+        widget = creerSeparateur(node);
+    }
+    else if(xmlStrcmp(node->name, "frame") == 0 )
+    {
+        widget = creerFrame(node);
     }
 
     //  Une petite verification avant de retourner le widget
@@ -80,7 +128,7 @@ GtkWidget *parseStructureAndCreateGUI(char cheminFichier[200])
     //  Creer le widget fenetre
     GtkWidget* mainWindow = creerFenetre(mainWindowNode);
 
-    //  Trouver le noeud fils de la fenetre, le creer et le lier Ã  son parent
+    //  Trouver le noeud fils de la fenetre, le creer et le lier à son parent
 
     printf("Parent: %s Child: %s\n", mainWindowNode->name, mainWindowNode->children->name);
     if(xmlStrcmp(mainWindowNode->children->name,"text"))
@@ -98,15 +146,15 @@ void createAndLinkChild(GtkWidget *parentWidget, int parentNature, xmlNode *chil
     xmlKeepBlanksDefault(0);
     printf("--------------------------------------------------\n\n");
     printf("Entrain de creer: %s\n", childNode->name);
-    //  Verifier si on est arrivÃ© Ã  un noeud feuille (pas de noeud(s) enfant(s))
+    //  Verifier si on est arrivé à un noeud feuille (pas de noeud(s) enfant(s))
     if(childNode && (xmlStrcmp(childNode->name,"text"))!=0)
     {
         int top, left, height, width;
 
         //  Creer le widget et le retourner
-        GtkWidget *childWidget = createWidget(childNode);
+        GtkWidget *childWidget = createWidget(parentWidget,childNode);
 
-        //  Le lier Ã  son widget pere
+        //  Le lier à son widget pere
         switch(parentNature)
         {
             case 1:
@@ -122,15 +170,26 @@ void createAndLinkChild(GtkWidget *parentWidget, int parentNature, xmlNode *chil
                 printf("Linked %s to %s\n", childNode->name, parentName);
                 break;
             case 4:
-                top = atoi(xmlGetProp(childNode,"startCol"));      //  La colonne d'oÃ¹ la cellule va dÃ©buter
-                left = atoi(xmlGetProp(childNode,"startRow"));     //  La ligne d'oÃ¹ la cellule va dÃ©buter
-                height = atoi(xmlGetProp(childNode,"finishRow"));  //  La ligne oÃ¹ la cellule va se terminer
-                width = atoi(xmlGetProp(childNode,"finishCol"));   //  La colonne oÃ¹ la cellule va se terminer
+                top = atoi(xmlGetProp(childNode,"startCol"));      //  La colonne d'où la cellule va débuter
+                left = atoi(xmlGetProp(childNode,"startRow"));     //  La ligne d'où la cellule va débuter
+                height = atoi(xmlGetProp(childNode,"finishRow"));  //  La ligne où la cellule va se terminer
+                width = atoi(xmlGetProp(childNode,"finishCol"));   //  La colonne où la cellule va se terminer
                 gtk_grid_attach(GTK_GRID(parentWidget),childWidget,left,top,width,height);
                 printf("Linked %s to %s\n", childNode->name, parentName);
                 break;
             case 5:
                 gtk_box_pack_start(GTK_BOX(parentWidget), childWidget, FALSE, FALSE, 0);
+                printf("Linked %s to %s\n", childNode->name, parentName);
+                break;
+            case 6:
+                gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(parentWidget),childWidget);
+                break;
+            case 7:
+                top = atoi(xmlGetProp(childNode,"startCol"));      //  La colonne d'où la cellule va débuter
+                left = atoi(xmlGetProp(childNode,"startRow"));     //  La ligne d'où la cellule va débuter
+                height = atoi(xmlGetProp(childNode,"finishRow"));  //  La ligne où la cellule va se terminer
+                width = atoi(xmlGetProp(childNode,"finishCol"));   //  La colonne où la cellule va se terminer
+                gtk_table_attach_defaults(GTK_TABLE(parentWidget),childWidget,top,width,left,height);
                 printf("Linked %s to %s\n", childNode->name, parentName);
                 break;
         }
